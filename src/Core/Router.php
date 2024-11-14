@@ -5,15 +5,31 @@ namespace App\Core;
 class Router
 {
     private $routes = [];
+    private $currentMiddleware = null;
+
+    public function group(callable $middleware, callable $routes)
+    {
+        $this->currentMiddleware = $middleware;
+        $routes($this);
+        $this->currentMiddleware = null;
+    }
 
     public function get($route, $action)
     {
-        $this->routes['GET'][$route] = $action;
+        $this->addRoute('GET', $route, $action);
     }
 
     public function post($route, $action)
     {
-        $this->routes['POST'][$route] = $action;
+        $this->addRoute('POST', $route, $action);
+    }
+
+    private function addRoute($method, $route, $action)
+    {
+        $this->routes[$method][$route] = [
+            'action' => $action,
+            'middleware' => $this->currentMiddleware,
+        ];
     }
 
     public function dispatch($uri)
@@ -22,7 +38,13 @@ class Router
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
         if (isset($this->routes[$method][$uri])) {
-            $action = $this->routes[$method][$uri];
+            $route = $this->routes[$method][$uri];
+            $action = $route['action'];
+            $middleware = $route['middleware'];
+
+            if ($middleware && is_callable($middleware)) {
+                call_user_func($middleware);
+            }
 
             if (is_callable($action)) {
                 return call_user_func($action);
