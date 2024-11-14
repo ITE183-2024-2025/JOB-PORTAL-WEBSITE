@@ -67,7 +67,7 @@ jobs:
 
       - name: Run migrations and seed data
         run: |
-          vendor/bin/php -r "
+          php -r "
           \$pdo = new PDO('mysql:host=127.0.0.1;dbname=test_db', 'root', 'password');
           \$pdo->exec('
               CREATE TABLE IF NOT EXISTS users (
