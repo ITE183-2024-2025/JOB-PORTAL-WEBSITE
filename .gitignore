@@ -1,0 +1,12 @@
+# Ignore environment file
+.env
+
+# Ignore Composer vendor directory
+/vendor
+
+# Ignore node_modules (if you're using Node.js in your project)
+/node_modules
+
+# Ignore system files
+.DS_Store
+Thumbs.db
