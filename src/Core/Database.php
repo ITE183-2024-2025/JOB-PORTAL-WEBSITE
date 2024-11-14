@@ -51,9 +51,11 @@ class Database
             foreach ($migrations as $migration) {
                 $migration->up();
             }
+
+
             $seeders = [new UserSeeder()];
             foreach ($seeders as $seeder) {
-                $seeder->run();
+                        $seeder->run();
             }
         }
     }
