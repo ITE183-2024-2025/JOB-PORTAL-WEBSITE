@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php">
+<phpunit bootstrap="vendor/autoload.php" colors="true">
+    <php>
+        <env name="SESSION_AUTO_START" value="0"/>
+        <env name="OUTPUT_BUFFERING" value="off"/>
+    </php>
     <testsuites>
         <testsuite name="Application Test Suite">
             <directory>./tests</directory>

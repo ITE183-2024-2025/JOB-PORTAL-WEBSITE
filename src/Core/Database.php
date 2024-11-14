@@ -23,24 +23,32 @@ class Database
             try {
                 $pdo = new PDO("mysql:host=$host", $user, $pass);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
                 $result = $pdo->query("SHOW DATABASES LIKE '$db'");
                 if ($result->rowCount() == 0) {
                     $pdo->exec("CREATE DATABASE `$db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
                 }
+
                 self::$pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
                 self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                self::runMigrationsAndSeeders();
             } catch (PDOException $e) {
-                die("Database connection failed: " . $e->getMessage());
+                throw new \Exception("Database connection failed: " . $e->getMessage());
             }
         }
         return self::$pdo;
     }
 
-    public static function exec($sql)
+    public static function exec($sql, array $params = [])
     {
         $stmt = self::$pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute($params);
+        return $stmt;
+    }
+
+    public static function initializeDatabase()
+    {
+        self::connect();
+        self::runMigrationsAndSeeders();
     }
 
     private static function runMigrationsAndSeeders()
