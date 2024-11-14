@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
     <php>
+        <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_NAME" value="job_portal"/>
+        <env name="DB_USER" value="root"/>
+        <env name="DB_PASSWORD" value=""/>
         <env name="SESSION_AUTO_START" value="0"/>
         <env name="OUTPUT_BUFFERING" value="off"/>
     </php>
