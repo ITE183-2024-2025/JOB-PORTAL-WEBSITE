@@ -1,0 +1,12 @@
+stages:
+  - lint
+
+php_code_sniffer:
+  stage: lint
+  image: php:8.2.12
+  before_script:
+    - apt-get update && apt-get install -y git unzip
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install
+  script:
+    - vendor/bin/phpcs --standard=PSR12 src/

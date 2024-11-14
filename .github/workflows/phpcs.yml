@@ -2,7 +2,7 @@ name: PHP Code Standards Check
 
 on:
   pull_request:
-    branches: [ master ]  # Adjust this to the branch you want to enforce standards on
+    branches: [ master ] 
 
 jobs:
   phpcs:
@@ -15,7 +15,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2.12'  # Adjust this to your PHP version
+          php-version: '8.2.12'  
           tools: composer
 
       - name: Install dependencies
