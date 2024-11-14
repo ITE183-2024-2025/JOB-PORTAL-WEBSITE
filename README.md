@@ -62,10 +62,27 @@ Here's a guide to set up the PHP native system for the Job Portal Website:
      composer install
      ```
 
-5. **Configure Database**
-   - Open XAMPP and start Apache and MySQL.
-   - Go to `http://localhost/phpmyadmin` and create a new database for the project.
-   - Update the database configuration in your project's configuration file (usually `.env` or `config/database.php`).
+Here’s the updated setup instruction for configuring the environment:
+
+---
+
+5. **Configure Environment and Database**
+   - In the project directory, duplicate the `.env.example` file and rename it to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Open the `.env` file in a text editor and input your local database credentials:
+     ```plaintext
+     DB_HOST=127.0.0.1
+     DB_NAME=your_database_name
+     DB_USER=your_database_username
+     DB_PASSWORD=your_database_password
+     ```
+   - Save the file after entering your database details.
+
+--- 
+
+This ensures you’re setting up your local environment configuration correctly with the cloned `.env` file.
 
 6. **Run the Application**
    - In your browser, go to [http://job-portal.local](http://job-portal.local) to access the application.
