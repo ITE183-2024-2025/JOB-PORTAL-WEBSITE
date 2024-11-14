@@ -3,25 +3,27 @@ $page_css = '<link rel="stylesheet" href="/assets/css/login.css">';
 $page_js = '<script src="/assets/js/login.js"></script>';
 ?>
 
-<!-- HTML Content for Login Page -->
 <div id="emoji" class="centered-emoji" style="display: none; font-size: 50px;">
-    ⛔🛡️ Wrong Credentials 🛡️⛔
+    ⛔🛡️ Invalid Credentials 🛡️⛔
 </div>
 
-<div class="form" id="form">
-  <div class="field email">
-    <div class="icon"></div>
-    <input class="input" id="email" type="email" placeholder="Email" autocomplete="off"/>
-  </div>
-  <div class="field password">
-    <div class="icon"></div>
-    <input class="input" id="password" type="password" placeholder="Password"/>
-  </div>
+<form id="loginForm" method="POST" action="/login">
+  <div class="form" id="form">
+    <div class="field email">
+      <div class="icon"></div>
+      <input class="input" id="email" name="email" type="email" placeholder="Email" autocomplete="off" required />
+    </div>
+    <div class="field password">
+      <div class="icon"></div>
+      <input class="input" id="password" name="password" type="password" placeholder="Password" required />
+    </div>
 
-  <input class="input" id="id" type="text" placeholder="" hidden/>
-  <button class="button" id="submit">LOGIN
-    <div class="side-top-bottom"></div>
-    <div class="side-left-right"></div>
-  </button>
-  <small>Fill in the form to Log In</small>
-</div>
+    <input class="input" id="id" type="text" placeholder="" hidden />
+    <button class="button" id="submit" type="submit">LOGIN
+      <div class="side-top-bottom"></div>
+      <div class="side-left-right"></div>
+    </button>
+    <small>Fill in the form to Log In</small>
+  </div>
+</form>
+

@@ -3,37 +3,16 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AuthController;
-use App\Core\View;
+use App\Core\Router;
+use App\Core\Session;
 
-$authController = new AuthController();
+Session::start();
 
-$page = $_GET['page'] ?? 'login';
+$router = new Router();
 
-switch ($page) {
-    case 'login':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $authController->login($email, $password);
-        } else {
-            $authController->showLogin();
-        }
-        break;
+$router->get('/login', [AuthController::class, 'showLogin']);
+$router->post('/login', [AuthController::class, 'login']);
+$router->get('/logout', [AuthController::class, 'logout']);
+$router->get('/dashboard', [AuthController::class, 'showDashboard']);
 
-    case 'logout':
-        $authController->logout();
-        break;
-
-    case 'dashboard':
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: /index.php?page=login");
-            exit;
-        }
-        View::render('dashboard.html');
-        break;
-
-    default:
-        $authController->showLogin();
-        break;
-}
+$router->dispatch($_SERVER['REQUEST_URI']);
