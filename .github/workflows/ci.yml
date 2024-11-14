@@ -27,12 +27,6 @@ jobs:
 
   phpunit:
     runs-on: ubuntu-latest
-    env:
-      DB_HOST: 127.0.0.1
-      DB_NAME: test_db
-      DB_USER: root
-      DB_PASSWORD: password
-
     services:
       mysql:
         image: mysql:8.0
@@ -59,6 +53,14 @@ jobs:
 
       - name: Install dependencies
         run: composer install
+
+      - name: Create .env file
+        run: |
+          cp .env.example .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_NAME=test_db" >> .env
+          echo "DB_USER=root" >> .env
+          echo "DB_PASSWORD=password" >> .env
 
       - name: Wait for MySQL to be ready
         run: sleep 10
