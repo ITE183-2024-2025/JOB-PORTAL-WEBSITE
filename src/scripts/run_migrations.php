@@ -43,7 +43,7 @@ class MigrationRunner
     }
 }
 
-$table = 'users'; 
+$table = 'users';
 
 if (!MigrationRunner::checkIfTableExists($table)) {
     echo "Table '$table' does not exist. Running migrations...\n";

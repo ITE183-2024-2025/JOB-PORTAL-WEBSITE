@@ -19,7 +19,7 @@ class Router
     public function dispatch($uri)
     {
         $uri = parse_url($uri, PHP_URL_PATH);
-        
+
         $method = $_SERVER['REQUEST_METHOD'];
 
         if (isset($this->routes[$method][$uri])) {
