@@ -35,8 +35,7 @@ class AuthController extends BaseController
             if ($user && password_verify($password, $user['password'])) {
                 Session::set('user_id', $user['id']);
                 if ($this->isAjaxRequest()) {
-                    echo json_encode(['status' => 'success', 'redirect' => '/dashboard']);
-                    return;
+                    $this->jsonResponse(['redirect' => '/dashboard']);
                 } else {
                     $this->render('dashboard.html', ['title' => 'Dashboard']);
                     return;
@@ -49,15 +48,10 @@ class AuthController extends BaseController
         }
 
         if ($this->isAjaxRequest()) {
-            echo json_encode(['status' => 'error', 'message' => $error]);
+            $this->jsonResponse(['message' => $error], 'error', 400);
         } else {
             $this->render('login.html', ['title' => 'Login', 'error' => $error]);
         }
-    }
-
-    private function isAjaxRequest()
-    {
-        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
     }
 
     public function logout()
