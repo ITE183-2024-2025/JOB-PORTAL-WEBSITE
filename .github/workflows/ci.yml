@@ -65,5 +65,23 @@ jobs:
       - name: Wait for MySQL to be ready
         run: sleep 10
 
+      - name: Run migrations and seed data
+        run: |
+          vendor/bin/php -r "
+          \$pdo = new PDO('mysql:host=127.0.0.1;dbname=test_db', 'root', 'password');
+          \$pdo->exec('
+              CREATE TABLE IF NOT EXISTS users (
+                  id INT AUTO_INCREMENT PRIMARY KEY,
+                  name VARCHAR(100) NOT NULL,
+                  email VARCHAR(100) UNIQUE NOT NULL,
+                  password VARCHAR(255) NOT NULL
+              );
+          ');
+          \$pdo->exec(\"
+              INSERT INTO users (id, name, email, password)
+              VALUES (1, 'Test User', 'test@example.com', '\$2y\$10\$examplepasswordhash')
+              ON DUPLICATE KEY UPDATE name='Test User';
+          \");"
+
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit --testdox
