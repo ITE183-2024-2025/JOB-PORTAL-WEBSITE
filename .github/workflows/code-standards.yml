@@ -58,8 +58,10 @@ jobs:
         continue-on-error: true
 
       - name: Push changes
-        run: git push
+        run: |
+          git push origin HEAD:${{ github.ref_name }}
         if: success()
+      
 
   # CI Pipeline with PHPUnit
   phpunit:
