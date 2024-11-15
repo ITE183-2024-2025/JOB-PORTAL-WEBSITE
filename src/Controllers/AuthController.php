@@ -14,6 +14,9 @@ class AuthController extends BaseController
         $this->userRepository = $userRepository ?: new UserRepository();
     }
 
+    /**
+     * Render the login page.
+     */
     public function showLogin()
     {
         if (Session::get('user_id')) {
@@ -24,43 +27,48 @@ class AuthController extends BaseController
         $this->render('login.html', ['title' => 'Login']);
     }
 
+    /**
+     * Handle user login via AJAX.
+     */
     public function login()
     {
-        $email = $_POST['email'] ?? '';
+        $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
 
-        if ($email && $password) {
-            $user = $this->userRepository->findByEmail($email);
-
-            if ($user && password_verify($password, $user['password'])) {
-                Session::set('user_id', $user['id']);
-                if ($this->isAjaxRequest()) {
-                    $this->jsonResponse(['redirect' => '/dashboard']);
-                } else {
-                    $this->render('dashboard.html', ['title' => 'Dashboard']);
-                    return;
-                }
-            } else {
-                $error = 'Invalid credentials';
-            }
-        } else {
-            $error = 'Please provide both email and password';
+        if (empty($email) || empty($password)) {
+            $this->jsonResponse(['message' => 'Email and password are required'], 'error', 400);
+            return;
         }
 
-        if ($this->isAjaxRequest()) {
-            $this->jsonResponse(['message' => $error], 'error', 400);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->jsonResponse(['message' => 'Invalid email format'], 'error', 400);
+            return;
+        }
+
+        $user = $this->userRepository->findByEmail($email);
+
+        if ($user && password_verify($password, $user['password'])) {
+            Session::set('user_id', $user['id']);
+            $this->jsonResponse(['message' => 'Login successful', 'redirect' => '/dashboard'], 'success', 200);
         } else {
-            $this->render('login.html', ['title' => 'Login', 'error' => $error]);
+            $this->jsonResponse(['message' => 'Invalid credentials'], 'error', 401);
         }
     }
 
+
+
+    /**
+     * Handle user logout via AJAX.
+     */
     public function logout()
     {
         Session::destroy();
-        $this->render('login.html', ['title' => 'Login', 'message' => 'You have successfully logged out']);
-        return;
+        $this->jsonResponse(['message' => 'You have successfully logged out', 'redirect' => '/login'], 'success', 200);
     }
 
+    /**
+     * Render the dashboard page.
+     */
     public function showDashboard()
     {
         if (!Session::get('user_id')) {

@@ -76,10 +76,7 @@ function submitForm() {
             formAnim.showAndMoveEmoji(data.message);
             formAnim.faceDirection(5);
         } else if (data.status === 'success') {
-            formAnim.faceDirection(4);
-            setTimeout(() => {
-                window.location.href = data.redirect;
-            }, 1500);
+            window.location.href = 'dashboard';
         }
     })
     .catch(error => {
@@ -88,6 +85,7 @@ function submitForm() {
         formAnim.faceDirection(5);
     });
 }
+
 
 setTimeout(function() {
     if (!focused) {

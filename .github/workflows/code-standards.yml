@@ -1,13 +1,17 @@
-name: CI Pipeline
+# Workflow for Code Standards and Tests
+name: Code Standards and Tests
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
   pull_request:
-    branches: [master]
+    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
+  # PHP CodeSniffer
   phpcs:
+    name: PHP CodeSniffer
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,10 +26,41 @@ jobs:
       - name: Install dependencies
         run: composer install
 
-      - name: Run PHP_CodeSniffer
+      - name: Run PHP CodeSniffer
         run: vendor/bin/phpcs --standard=PSR12 src/
 
+  # PHP Code Beautifier and Fixer
+  phpcbf:
+    name: PHP Code Beautifier and Fixer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2.12'
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run PHP Code Beautifier and Fixer
+        run: vendor/bin/phpcbf --standard=PSR12 src/
+
+      - name: Verify PSR-12 Compliance
+        run: |
+          if vendor/bin/phpcbf --standard=PSR12 src/ | grep -q 'ERROR'; then
+            echo "Code did not pass PSR-12 standards."
+            exit 1
+          else
+            echo "Code passed PSR-12 standards."
+          fi
+
+  # CI Pipeline with PHPUnit
   phpunit:
+    name: PHPUnit Tests
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -56,8 +91,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          cp .env.example .env
-          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_HOST=127.0.0.1" > .env
           echo "DB_NAME=test_db" >> .env
           echo "DB_USER=root" >> .env
           echo "DB_PASSWORD=password" >> .env
