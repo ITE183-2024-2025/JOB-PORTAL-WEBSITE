@@ -32,22 +32,29 @@ class AuthController extends BaseController
      */
     public function login()
     {
-        $email = $_POST['email'] ?? '';
+        $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
 
-        if ($email && $password) {
-            $user = $this->userRepository->findByEmail($email);
-
-            if ($user && password_verify($password, $user['password'])) {
-                Session::set('user_id', $user['id']);
-                $this->jsonResponse(['message' => 'Login successful', 'redirect' => '/dashboard'], 'success', 200);
-            } else {
-                $this->jsonResponse(['message' => 'Invalid credentials'], 'error', 401);
-            }
-        } else {
+        if (empty($email) || empty($password)) {
             $this->jsonResponse(['message' => 'Email and password are required'], 'error', 400);
+            return;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->jsonResponse(['message' => 'Invalid email format'], 'error', 400);
+            return;
+        }
+
+        $user = $this->userRepository->findByEmail($email);
+
+        if ($user && password_verify($password, $user['password'])) {
+            Session::set('user_id', $user['id']);
+            $this->jsonResponse(['message' => 'Login successful', 'redirect' => '/dashboard'], 'success', 200);
+        } else {
+            $this->jsonResponse(['message' => 'Invalid credentials'], 'error', 401);
         }
     }
+
 
 
     /**

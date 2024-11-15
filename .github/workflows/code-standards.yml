@@ -1,20 +1,18 @@
-# Workflow for Code Standards Check and Fix
+# Workflow for Code Standards and Tests
 name: Code Standards and Tests
 
 on:
-  pull_request:
-    branches:
-      - master
-
   push:
-    branches:
-      - master
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
+  # PHP CodeSniffer
   phpcs:
-    name: PHP_CodeSniffer
+    name: PHP CodeSniffer
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,19 +20,19 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.2.12'
           tools: composer
 
       - name: Install dependencies
-        run: composer install --no-scripts --no-interaction
+        run: composer install
 
-      - name: Run PHP_CodeSniffer
+      - name: Run PHP CodeSniffer
         run: vendor/bin/phpcs --standard=PSR12 src/
 
+  # PHP Code Beautifier and Fixer
   phpcbf:
-    name: PHP_CodeBeautifier
+    name: PHP Code Beautifier and Fixer
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -42,11 +40,11 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.2.12'
           tools: composer
 
       - name: Install dependencies
-        run: composer install --no-scripts --no-interaction
+        run: composer install
 
       - name: Run PHP Code Beautifier and Fixer
         run: vendor/bin/phpcbf --standard=PSR12 src/
@@ -56,13 +54,14 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
-          git commit -m "Apply PSR12 code style fixes"
+          git commit -m "Apply code style fixes via PHP Code Beautifier and Fixer"
         continue-on-error: true
 
       - name: Push changes
         run: git push
         if: success()
 
+  # CI Pipeline with PHPUnit
   phpunit:
     name: PHPUnit Tests
     runs-on: ubuntu-latest
@@ -87,25 +86,39 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.2.12'
           tools: composer
 
       - name: Install dependencies
-        run: composer install --no-scripts --no-interaction
+        run: composer install
 
       - name: Create .env file
         run: |
-          cp .env.example .env
-          echo "DB_HOST=127.0.0.1" >> .env
-          echo "DB_DATABASE=test_db" >> .env
-          echo "DB_USERNAME=root" >> .env
+          echo "DB_HOST=127.0.0.1" > .env
+          echo "DB_NAME=test_db" >> .env
+          echo "DB_USER=root" >> .env
           echo "DB_PASSWORD=password" >> .env
 
       - name: Wait for MySQL to be ready
-        run: sleep 15
+        run: sleep 10
 
-      - name: Run migrations and seed database
-        run: php artisan migrate --seed
+      - name: Run migrations and seed data
+        run: |
+          php -r "
+          \$pdo = new PDO('mysql:host=127.0.0.1;dbname=test_db', 'root', 'password');
+          \$pdo->exec('
+              CREATE TABLE IF NOT EXISTS users (
+                  id INT AUTO_INCREMENT PRIMARY KEY,
+                  name VARCHAR(100) NOT NULL,
+                  email VARCHAR(100) UNIQUE NOT NULL,
+                  password VARCHAR(255) NOT NULL
+              );
+          ');
+          \$pdo->exec(\"
+              INSERT INTO users (id, name, email, password)
+              VALUES (1, 'Test User', 'test@example.com', '\$2y\$10\$examplepasswordhash')
+              ON DUPLICATE KEY UPDATE name='Test User';
+          \");"
 
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit --testdox
