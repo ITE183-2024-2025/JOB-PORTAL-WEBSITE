@@ -4,8 +4,7 @@ namespace App\Core;
 
 use PDO;
 use PDOException;
-use App\Migrations\CreateUsersTable;
-use App\Seeders\UserSeeder;
+use App\Scripts\MigrationRunner;
 
 class Database
 {
@@ -24,11 +23,13 @@ class Database
                 $pdo = new PDO("mysql:host=$host", $user, $pass);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+                // Check if the database exists and create it if not
                 $result = $pdo->query("SHOW DATABASES LIKE '$db'");
                 if ($result->rowCount() == 0) {
                     $pdo->exec("CREATE DATABASE `$db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
                 }
 
+                // Connect to the specified database
                 self::$pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
                 self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
@@ -43,33 +44,5 @@ class Database
         $stmt = self::$pdo->prepare($sql);
         $stmt->execute($params);
         return $stmt;
-    }
-
-    public static function initializeDatabase()
-    {
-        self::connect();
-        self::runMigrationsAndSeeders();
-    }
-
-    private static function runMigrationsAndSeeders()
-    {
-        $table = 'users';
-        if (!self::checkIfTableExists($table)) {
-            $migrations = [new CreateUsersTable()];
-            foreach ($migrations as $migration) {
-                $migration->up();
-            }
-            $seeders = [new UserSeeder()];
-            foreach ($seeders as $seeder) {
-                $seeder->run();
-            }
-        }
-    }
-
-    private static function checkIfTableExists($tableName)
-    {
-        $query = self::$pdo->prepare("SHOW TABLES LIKE :table");
-        $query->execute([':table' => $tableName]);
-        return $query->rowCount() > 0;
     }
 }

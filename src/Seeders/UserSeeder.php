@@ -10,11 +10,22 @@ class UserSeeder
     {
         $db = Database::connect();
 
-        $sql = "INSERT INTO users (name, email, password) VALUES
-                ('John Doe', 'john@example.com', :password),
-                ('Jane Doe', 'jane@example.com', :password)";
+        $users = [
+            [
+                'name' => 'John Doe',
+                'email' => 'john@example.com',
+                'password' => password_hash('password', PASSWORD_BCRYPT)
+            ],
+            [
+                'name' => 'Jane Smith',
+                'email' => 'jane@example.com',
+                'password' => password_hash('password', PASSWORD_BCRYPT)
+            ],
+        ];
 
-        $stmt = $db->prepare($sql);
-        $stmt->execute([':password' => password_hash('password123', PASSWORD_BCRYPT)]);
+        foreach ($users as $user) {
+            $stmt = $db->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+            $stmt->execute($user);
+        }
     }
 }

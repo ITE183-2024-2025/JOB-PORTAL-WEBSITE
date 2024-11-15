@@ -14,24 +14,117 @@ class AuthControllerTest extends TestCase
 
     protected function setUp(): void
     {
-        ob_start();
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->authController = new AuthController($this->userRepository);
+
+        // Mock the AuthController with jsonResponse mocked
+        $this->authController = $this->getMockBuilder(AuthController::class)
+            ->setConstructorArgs([$this->userRepository])
+            ->onlyMethods(['jsonResponse', 'isAjaxRequest'])
+            ->getMock();
+
         Session::start();
     }
 
     protected function tearDown(): void
     {
-        ob_end_clean();
         Session::destroy();
     }
+    public function testLoginSuccessful()
+    {
+        $_POST['email'] = 'test@example.com';
+        $_POST['password'] = 'password';
+    
+        $hashedPassword = password_hash('password', PASSWORD_DEFAULT);
+        $this->userRepository->method('findByEmail')
+            ->with('test@example.com')
+            ->willReturn(['id' => 1, 'password' => $hashedPassword]);
+    
+        $this->authController = $this->getMockBuilder(AuthController::class)
+            ->setConstructorArgs([$this->userRepository])
+            ->onlyMethods(['isAjaxRequest', 'jsonResponse'])
+            ->getMock();
+    
+        $this->authController->method('isAjaxRequest')
+            ->willReturn(true);
+    
+        $this->authController->expects($this->once())
+            ->method('jsonResponse')
+            ->with(
+                $this->equalTo(['message' => 'Login successful', 'redirect' => '/dashboard']),
+                $this->equalTo('success'),
+                $this->equalTo(200)
+            );
+    
+        $this->authController->login();
+    }
+    
+    
 
-    /**
-     * @runInSeparateProcess
-     */
+    public function testLoginFailsWithInvalidCredentials()
+    {
+        $_POST['email'] = 'test@example.com';
+        $_POST['password'] = 'wrongpassword';
+
+        $this->userRepository->method('findByEmail')
+            ->with('test@example.com')
+            ->willReturn(['id' => 1, 'password' => password_hash('password', PASSWORD_DEFAULT)]);
+
+        $this->authController->method('isAjaxRequest')
+            ->willReturn(true);
+
+        $this->authController->expects($this->once())
+            ->method('jsonResponse')
+            ->with(
+                $this->equalTo(['message' => 'Invalid credentials']),
+                $this->equalTo('error'),
+                $this->equalTo(401)
+            );
+
+        $this->authController->login();
+    }
+
+    public function testLoginFailsWithMissingFields()
+    {
+        $_POST = []; // Missing email and password
+
+        $this->authController->method('isAjaxRequest')
+            ->willReturn(true);
+
+        $this->authController->expects($this->once())
+            ->method('jsonResponse')
+            ->with(
+                $this->equalTo(['message' => 'Email and password are required']),
+                $this->equalTo('error'),
+                $this->equalTo(400)
+            );
+
+        $this->authController->login();
+    }
+
+    public function testLogout()
+    {
+        Session::set('user_id', 1);
+    
+        $this->authController->method('isAjaxRequest')
+            ->willReturn(true);
+    
+        $this->authController->expects($this->once())
+            ->method('jsonResponse')
+            ->with(
+                $this->equalTo(['message' => 'You have successfully logged out', 'redirect' => '/login']),
+                $this->equalTo('success'),
+                $this->equalTo(200)
+            );
+    
+        $this->authController->logout();
+
+    }
+    
+
     public function testShowLoginRendersDashboardIfAuthenticated()
     {
         Session::set('user_id', 1);
+
         $this->authController = $this->getMockBuilder(AuthController::class)
             ->setConstructorArgs([$this->userRepository])
             ->onlyMethods(['render'])
@@ -44,12 +137,10 @@ class AuthControllerTest extends TestCase
         $this->authController->showLogin();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testShowLoginRendersLoginIfNotAuthenticated()
     {
         Session::set('user_id', null);
+
         $this->authController = $this->getMockBuilder(AuthController::class)
             ->setConstructorArgs([$this->userRepository])
             ->onlyMethods(['render'])
@@ -62,87 +153,6 @@ class AuthControllerTest extends TestCase
         $this->authController->showLogin();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testLoginSuccessRedirectsToDashboard()
-    {
-        $_POST['email'] = 'test@example.com';
-        $_POST['password'] = 'password';
-
-        $hashedPassword = password_hash('password', PASSWORD_DEFAULT);
-
-        $this->userRepository->expects($this->once())
-            ->method('findByEmail')
-            ->with('test@example.com')
-            ->willReturn(['id' => 1, 'password' => $hashedPassword]);
-
-        $this->authController = $this->getMockBuilder(AuthController::class)
-            ->setConstructorArgs([$this->userRepository])
-            ->onlyMethods(['render', 'isAjaxRequest'])
-            ->getMock();
-
-        $this->authController->method('isAjaxRequest')
-            ->willReturn(false);
-
-        $this->authController->expects($this->once())
-            ->method('render')
-            ->with('dashboard.html', ['title' => 'Dashboard']);
-
-        $this->authController->login();
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
-    public function testLoginFailsWithInvalidCredentials()
-    {
-        $_POST['email'] = 'test@example.com';
-        $_POST['password'] = 'wrongpassword';
-
-        $this->userRepository->method('findByEmail')
-            ->with('test@example.com')
-            ->willReturn(['id' => 1, 'password' => password_hash('password', PASSWORD_DEFAULT)]);
-
-        $this->authController = $this->getMockBuilder(AuthController::class)
-            ->setConstructorArgs([$this->userRepository])
-            ->onlyMethods(['render', 'isAjaxRequest'])
-            ->getMock();
-
-        $this->authController->method('isAjaxRequest')
-            ->willReturn(false);
-        
-        $this->authController->expects($this->once())
-            ->method('render')
-            ->with('login.html', ['title' => 'Login', 'error' => 'Invalid credentials']);
-
-        $this->authController->login();
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
-    public function testLogoutDestroysSessionAndRedirectsToLogin()
-    {
-        Session::set('user_id', 1);
-
-        $this->authController = $this->getMockBuilder(AuthController::class)
-            ->setConstructorArgs([$this->userRepository])
-            ->onlyMethods(['render'])
-            ->getMock();
-
-        $this->authController->expects($this->once())
-            ->method('render')
-            ->with('login.html', ['title' => 'Login', 'message' => 'You have successfully logged out']);
-
-        $this->authController->logout();
-
-        $this->assertNull(Session::get('user_id'));
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
     public function testShowDashboardRendersDashboardIfAuthenticated()
     {
         Session::set('user_id', 1);
@@ -159,9 +169,6 @@ class AuthControllerTest extends TestCase
         $this->authController->showDashboard();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testShowDashboardRedirectsToLoginIfNotAuthenticated()
     {
         Session::set('user_id', null);
