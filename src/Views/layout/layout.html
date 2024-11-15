@@ -9,7 +9,24 @@
     {{ page_css }}
 </head>
 <body>
-    {{ content }}
+    <!-- Check if sidebar should be displayed -->
+    <?php if (isset($sidebar) && $sidebar !== false): ?>
+        <div class="container">
+            <!-- Include Sidebar -->
+            <!-- <?php include __DIR__ . '/side-bar.html'; ?> -->
+
+            <!-- Content area -->
+            <div class="body">
+                {{ content }}
+            </div>
+        </div>
+    <?php else: ?>
+        <!-- Content area without sidebar -->
+        <div class="body">
+            {{ content }}
+        </div>
+    <?php endif; ?>
+
     <script src="/assets/js/scripts.js"></script> 
     {{ page_js }}
 </body>

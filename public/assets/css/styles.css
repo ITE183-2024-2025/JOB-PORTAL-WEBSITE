@@ -1,0 +1,52 @@
+/* Keyframes */
+@keyframes slide-in {
+    0% { transform: translateX(-100%); }
+    20% { transform: translateX(0); }
+}
+@keyframes slide-in2 {
+    0% { transform: translateX(-100%); }
+    20% { transform: translateX(0); }
+}
+
+/* Variables */
+:root {
+    --white: white;
+    --textwhite: white;
+    --grey-white: rgb(255, 255, 255);
+    --lightgrey: lightgrey;
+    --trcol: rgb(236, 235, 235);
+    --boxs: rgba(0, 0, 0, 0.1);
+    --trhover: rgb(225, 225, 225);
+}
+
+/* General Reset */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+body {
+    overflow: hidden;
+}
+
+/* Sidebar Styles */
+.side-bar {
+    flex: 1;
+    padding: 6px;
+    min-width: 270px;
+    max-width: 270px;
+    background: var(--grey-white);
+}
+
+/* Body Styles */
+.body {
+    background: var(--grey-white);
+    flex: 4;
+    height: 100vh;
+}
+
+/* Other Styles (buttons, tables, menu, etc.) */
+/* Add your CSS styles here, following the same format */
+
