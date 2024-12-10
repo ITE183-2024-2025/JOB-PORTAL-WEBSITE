@@ -1,4 +1,209 @@
-<!-- src/Views/templates/dashboard.html -->
-<h2>Welcome to the Dashboard</h2>
-<p>You are logged in!</p>
-<a href="/logout">Logout</a>
+
+    <div class="container">
+        <div class="d-flex">
+            <div class="box">
+                <div class="img big-img">
+                    <div class="data">
+                        <div class="icon">
+                            <img src="/assets/img/Icon.png" alt="Job Icon">
+                        </div>
+                        <div class="info">
+                            <span class="count">$ 300,400</span>
+                            <span class="label">Active Jobs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="img big-img">
+                    <div class="data">
+                        <div class="icon">
+                            <img src="/assets/img/Icon (1).png" alt="Job Icon">
+                        </div>
+                        <div class="info">
+                            <span class="count">$ 300,400</span>
+                            <span class="label">Companies</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="img big-img">
+                    <div class="data">
+                        <div class="icon">
+                            <img src="/assets/img/Icon (2).png" alt="Job Icon">
+                        </div>
+                        <div class="info">
+                            <span class="count">$ 300,400</span>
+                            <span class="label">Job Seekers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="img big-img">
+                    <div class="data">
+                        <div class="icon">
+                            <img src="/assets/img/Icon.png" alt="Job Icon">
+                        </div>
+                        <div class="info">
+                            <span class="count">$ 300,400</span>
+                            <span class="label">New Jobs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        <div class="tables">
+            <div class="job-card">
+                <div class="job-header">
+                    <span class="job-title">Customer Service Position</span>
+                    <span class="job-type">Any</span>
+                </div>
+                <div class="job-meta">
+                    <span class="job-company">Employer</span>
+                    <span class="job-date">Posted on Nov 28, 2024</span>
+                </div>
+                <div class="job-salary-level">
+                    <span class="job-salary">$500/mo</span>
+                    <span class="job-level">Entry Level</span>
+                </div>
+                <div class="job-description" id="job-description-1">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                  </div>
+                <div class="job-tags">
+                    <span class="tag">Chat Support</span>
+                    <span class="tag">English Speaking</span>
+                    <span class="tag">Communication</span>
+                </div>
+            </div>
+        </div>
+
+    <div class="category-container">
+        <div class="category-header">
+            <h2>Popular category</h2>
+            <a href="#" class="view-all">View All &rarr;</a>
+        </div>
+        <div class="categories">
+            <div class="category">
+                <div class="icon">
+                    <img src="/assets/img/Icon (3).png" alt="Graphics & Design">
+                </div>
+                <div class="info">
+                    <h3>Graphics & Design</h3>
+                    <p>357 Open position</p>
+                </div>
+            </div>
+            <div class="category">
+                <div class="icon">
+                    <img src="/assets/img/Icon (4).png" alt="Code & Programming">
+                </div>
+                <div class="info">
+                    <h3>Code & Programming</h3>
+                    <p>312 Open position</p>
+                </div>
+            </div>
+            <div class="category">
+                <div class="icon">
+                    <img src="/assets/img/Icon (5).png" alt="Digital Marketing">
+                </div>
+                <div class="info">
+                    <h3>Digital Marketing</h3>
+                    <p>297 Open position</p>
+                </div>
+            </div>
+            <div class="category">
+                <div class="icon">
+                    <img src="/assets/img/Icon (6).png" alt="Video & Animation">
+                </div>
+                <div class="info">
+                    <h3>Video & Animation</h3>
+                    <p>247 Open position</p>
+                </div>
+            </div>
+            <div class="category">
+                <div class="icon">
+                    <img src="/assets/img/Icon (7).png" alt="Music & Audio">
+                </div>
+                <div class="info">
+                    <h3>Music & Audio</h3>
+                    <p>204 Open position</p>
+                </div>
+            </div>
+            <div class="category">
+                <div class="icon">
+                    <img src="/assets/img/Icon (8).png" alt="Account & Finance">
+                </div>
+                <div class="info">
+                    <h3>Account & Finance</h3>
+                    <p>167 Open position</p>
+                </div>
+            </div>
+            <div class="category">
+                <div class="icon">
+                    <img src="/assets/img/Icon (9).png" alt="Health & Care">
+                </div>
+                <div class="info">
+                    <h3>Health & Care</h3>
+                    <p>125 Open position</p>
+                </div>
+            </div>
+            <div class="category">
+                <div class="icon">
+                    <img src="/assets/img/Icon (9).png" alt="Data & Science">
+                </div>
+                <div class="info">
+                    <h3>Data & Science</h3>
+                    <p>57 Open position</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>// See More functionality
+        function truncateDescription(id, maxLength) {
+          const description = document.getElementById(`job-description-${id}`);
+          const fullText = description.textContent.trim();
+        
+          // Only truncate if text length exceeds maxLength
+          if (fullText.length > maxLength) {
+            const truncatedText = fullText.substring(0, maxLength) + '...'; // Truncate with ellipsis
+            description.textContent = truncatedText;  // Set the truncated text
+        
+            // Add "See more" link
+            const seeMore = document.createElement('span');
+            seeMore.className = 'see-more';
+            seeMore.textContent = ' See more';
+            seeMore.onclick = function () {
+              toggleDescription(id);
+            };
+            description.appendChild(seeMore);
+            description.setAttribute('data-full-text', fullText);  // Store full text for later
+          }
+        }
+        
+        function toggleDescription(id) {
+          const description = document.getElementById(`job-description-${id}`);
+          const seeMore = description.querySelector('.see-more');
+        
+          // Toggle the full description when clicking "See more"
+          description.classList.toggle('expanded');
+        
+          if (description.classList.contains('expanded')) {
+            description.textContent = description.getAttribute('data-full-text');  // Show full description
+            const seeLess = document.createElement('span');
+            seeLess.className = 'see-more';
+            seeLess.textContent = ' See less';
+            seeLess.onclick = function () {
+              toggleDescription(id);
+            };
+            description.appendChild(seeLess);
+          } else {
+            truncateDescription(id, 200);  // Revert back to truncated description
+          }
+        }
+        </script>
+</body>
+</html>
