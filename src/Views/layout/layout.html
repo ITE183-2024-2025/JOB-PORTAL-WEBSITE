@@ -2,32 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
     <link rel="shortcut icon" href="/icons/icon.ico" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="/assets/css/styles.css"> 
-    {{ page_css }}
+    <?php echo isset($page_css) ? $page_css : ''; ?>  <!-- Insert page-specific CSS if available -->
 </head>
 <body>
-    <!-- Check if sidebar should be displayed -->
-    <?php if (isset($sidebar) && $sidebar !== false): ?>
-        <div class="container">
-            <!-- Include Sidebar -->
-            <!-- <?php include __DIR__ . '/side-bar.html'; ?> -->
 
-            <!-- Content area -->
-            <div class="body">
-                {{ content }}
-            </div>
-        </div>
-    <?php else: ?>
-        <!-- Content area without sidebar -->
-        <div class="body">
-            {{ content }}
-        </div>
-    <?php endif; ?>
+    <?php include "nav.html"; ?> <!-- Include navigation HTML -->
+
+    <div>
+        <?php echo isset($content) ? $content : ''; ?> <!-- Placeholder for dynamic content -->
+    </div>
+
+    <?php include "footer.html"; ?> <!-- Include footer HTML -->
 
     <script src="/assets/js/scripts.js"></script> 
-    {{ page_js }}
+    <?php echo isset($page_js) ? $page_js : ''; ?> <!-- Insert page-specific JS if available -->
 </body>
 </html>
