@@ -92,3 +92,13 @@ This ensures you’re setting up your local environment configuration correctly 
 - **Environment Configuration**: Adjust any specific environment variables needed for the application in the `.env` file if provided.
 
 This setup should get your Job Portal Website up and running! Let me know if you need any further customization or troubleshooting.
+
+---
+
+TEAM MEMBERS:
+
+1. John Mark Bolongan
+2. Jade Ace Flor
+3. Cyvel Gelena
+4. Ivan Kenneth Jabines
+5. Althea Nicole Wasawas
