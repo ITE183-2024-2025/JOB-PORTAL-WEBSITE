@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Job</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #0056d2;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        button {
+            background-color: #0056d2;
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0041a6;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background: #eef;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            background: #dce5ff;
+        }
+
+        .add-skill {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .add-skill input {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Post a Job
+    </header>
+    <div class="container">
+        <h1>Job Details</h1>
+        <form>
+            <div>
+                <label for="job-title">Job Title</label>
+                <input type="text" id="job-title" name="job-title" placeholder="Enter the job title" required>
+            </div>
+
+            <div>
+                <label for="company-name">Company Name</label>
+                <input type="text" id="company-name" name="company-name" placeholder="Enter your company name" required>
+            </div>
+
+            <div>
+                <label for="salary">Salary (₱/mo)</label>
+                <input type="number" id="salary" name="salary" placeholder="Enter the salary" required>
+            </div>
+
+            <div>
+                <label for="job-type">Job Type</label>
+                <select id="job-type" name="job-type" required>
+                    <option value="">Select Job Type</option>
+                    <option value="full-time">Full-Time</option>
+                    <option value="part-time">Part-Time</option>
+                    <option value="freelance">Freelance</option>
+                    <option value="internship">Internship</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="description">Job Description</label>
+                <textarea id="description" name="description" placeholder="Provide details about the job" required></textarea>
+            </div>
+
+            <div>
+                <label>Required Skills</label>
+                <div class="skills" id="skill-list">
+                    <span class="skill-tag">Communication</span>
+                    <span class="skill-tag">English Speaking</span>
+                    <span class="skill-tag">Problem Solving</span>
+                </div>
+                <div class="add-skill">
+                    <input type="text" id="new-skill" placeholder="Add a skill">
+                    <button type="button" onclick="addSkill()">Add</button>
+                </div>
+            </div>
+
+            <button type="submit">Post Job</button>
+        </form>
+    </div>
+
+    <script>
+        function addSkill() {
+            const skillInput = document.getElementById('new-skill');
+            const skillList = document.getElementById('skill-list');
+            const skillValue = skillInput.value.trim();
+
+            if (skillValue) {
+                const skillTag = document.createElement('span');
+                skillTag.className = 'skill-tag';
+                skillTag.textContent = skillValue;
+                skillTag.onclick = () => skillTag.remove();
+                skillList.appendChild(skillTag);
+                skillInput.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
