@@ -2,6 +2,8 @@
 
 A **Job Portal Website** is a comprehensive online platform that connects job seekers with employers across various industries. 
 
+🔴 Add Project Video
+
 ## Features
 - **Job Seeker Profile**: Candidates can create profiles, upload resumes, and search for job openings based on keywords, location, industry, or job type.
 - **Employer Dashboard**: Employers can post job listings, filter applicants, and manage recruitment processes efficiently.
