@@ -7,23 +7,40 @@ $page_js = '<script src="/assets/js/login.js"></script>';
     ⛔🛡️ Invalid Credentials 🛡️⛔
 </div>
 
-<form id="loginForm" method="POST" action="/login">
-  <div class="form" id="form">
-    <div class="field email">
-      <div class="icon"></div>
-      <input class="input" id="email" name="email" type="email" placeholder="Email" autocomplete="off" required />
-    </div>
-    <div class="field password">
-      <div class="icon"></div>
-      <input class="input" id="password" name="password" type="password" placeholder="Password" required />
-    </div>
-
-    <input class="input" id="id" type="text" placeholder="" hidden />
-    <button class="button" id="submit" type="submit">LOGIN
-      <div class="side-top-bottom"></div>
-      <div class="side-left-right"></div>
-    </button>
-    <small>Fill in the form to Log In</small>
+<div class="container" id="container">
+  <div class="form-container sign-up">
+      <form>
+          <h1>Create Account</h1>
+          <span>or use your email for registeration</span>
+          <input type="text" placeholder="Name">
+          <input type="email" placeholder="Email">
+          <input type="password" placeholder="Password">
+          <button>Sign Up</button>
+      </form>
   </div>
-</form>
+  <div class="form-container sign-in">
+      <form id="loginForm" method="POST" action="/login">
+          <h1>Sign In</h1>
+          <span>or use your email password</span>
+          <input class="input" id="email" name="email" type="email" placeholder="Email" autocomplete="off" required />
+          <input class="input" id="password" name="password" type="password" placeholder="Password" required />
+          <a href="#">Forget Your Password?</a>
+          <button class="button" id="submit" type="submit">LOGIN</button>
+      </form>
+  </div>
+  <div class="toggle-container">
+      <div class="toggle">
+          <div class="toggle-panel toggle-left">
+              <h1>Welcome to BlueJob!   </h1>
+              <p>Enter your personal details to use all of site features</p>
+              <button class="hidden" id="login">Sign In</button>
+          </div>
+          <div class="toggle-panel toggle-right">
+              <h1>Welcome to BlueJob!</h1>
+              <p>Register with your personal details to use all of site features</p>
+              <button class="hidden" id="register">Sign Up</button>
+          </div>
+      </div>
+  </div>
+</div>
 

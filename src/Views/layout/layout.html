@@ -3,24 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Portal</title>
+    <title>{{ title }}</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
     <link rel="shortcut icon" href="/icons/icon.ico" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="/assets/css/styles.css"> 
-    <?php echo isset($page_css) ? $page_css : ''; ?>  <!-- Insert page-specific CSS if available -->
+    {{ page_css }} <!-- Insert page-specific CSS if available -->
 </head>
 <body>
 
-    <?php include "nav.html"; ?> <!-- Include navigation HTML -->
+    <?php if ($show_nav): ?> 
+        <?php include "nav.html"; ?> 
+    <?php endif; ?>
 
     <div>
-        <?php echo isset($content) ? $content : ''; ?> <!-- Placeholder for dynamic content -->
+        {{ content }}
     </div>
 
-    <?php include "footer.html"; ?> <!-- Include footer HTML -->
+    <?php if ($show_footer): ?>
+        <?php include "footer.html"; ?> 
+    <?php endif; ?>
 
     <script src="/assets/js/scripts.js"></script> 
-    <?php echo isset($page_js) ? $page_js : ''; ?> <!-- Insert page-specific JS if available -->
+    {{ page_js }} 
 </body>
 </html>

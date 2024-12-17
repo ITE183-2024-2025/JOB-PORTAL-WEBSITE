@@ -1,4 +1,52 @@
+<style>
+    .job-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
 
+.job-modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #ddd;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+#apply-now {
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
     <div class="container">
         <div class="d-flex">
             <div class="box">
@@ -56,30 +104,9 @@
         </div>
     </div>
     
-        <div class="tables">
-            <div class="job-card">
-                <div class="job-header">
-                    <span class="job-title">Customer Service Position</span>
-                    <span class="job-type">Any</span>
-                </div>
-                <div class="job-meta">
-                    <span class="job-company">Employer</span>
-                    <span class="job-date">Posted on Nov 28, 2024</span>
-                </div>
-                <div class="job-salary-level">
-                    <span class="job-salary">$500/mo</span>
-                    <span class="job-level">Entry Level</span>
-                </div>
-                <div class="job-description" id="job-description-1">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  </div>
-                <div class="job-tags">
-                    <span class="tag">Chat Support</span>
-                    <span class="tag">English Speaking</span>
-                    <span class="tag">Communication</span>
-                </div>
-            </div>
-        </div>
+    <div class="tables" id="job-cards-container">
+        
+    </div>
 
     <div class="category-container">
         <div class="category-header">
@@ -162,48 +189,172 @@
         </div>
     </div>
 
-    <script>// See More functionality
-        function truncateDescription(id, maxLength) {
-          const description = document.getElementById(`job-description-${id}`);
-          const fullText = description.textContent.trim();
-        
-          // Only truncate if text length exceeds maxLength
-          if (fullText.length > maxLength) {
+    <div id="job-modal" class="job-modal">
+        <div class="job-modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-job-title"></h2>
+            <p id="modal-company"></p>
+            <p id="modal-posted-date"></p>
+            <p id="modal-job-type"></p>
+            <p id="modal-job-description"></p>
+            <p id="modal-job-level"></p>
+            <p id="modal-salary"></p>
+            <div id="modal-tags"></div>
+            <button id="apply-now">Apply Now</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // JSON object with the job data
+    const jobsData = [
+        {
+            "jobTitle": "Customer Service Position",
+            "jobType": "Any",
+            "company": "Employer",
+            "postedDate": "Nov 28, 2024",
+            "salary": "$500/mo",
+            "jobLevel": "Entry Level",
+            "jobDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...",
+            "tags": ["Chat Support", "English Speaking", "Communication"]
+        },
+        {
+            "jobTitle": "Software Engineer",
+            "jobType": "Full-Time",
+            "company": "Tech Corp",
+            "postedDate": "Nov 15, 2024",
+            "salary": "$8000/mo",
+            "jobLevel": "Mid-Level",
+            "jobDescription": "We are looking for a software engineer with experience in JavaScript, React, Node.js. You will be building scalable and efficient systems with a focus on performance and scalability.",
+            "tags": ["JavaScript", "React", "Node.js"]
+        },
+        {
+            "jobTitle": "Marketing Specialist",
+            "jobType": "Part-Time",
+            "company": "MarketPro",
+            "postedDate": "Nov 10, 2024",
+            "salary": "$3000/mo",
+            "jobLevel": "Entry Level",
+            "jobDescription": "As a marketing specialist, you will be responsible for managing marketing campaigns, developing strategies, and engaging with the target audience. You must have a strong understanding of SEO and content marketing.",
+            "tags": ["SEO", "Content Creation", "Social Media"]
+        }
+    ];
+
+    // Insert the data into the HTML dynamically
+    const container = document.getElementById('job-cards-container');  // Assuming a container exists for job cards
+
+    jobsData.forEach((job, index) => {
+        // Create a job card for each job
+        const jobCard = document.createElement('div');
+        jobCard.classList.add('job-card');
+
+        jobCard.innerHTML = `
+            <div class="job-header">
+                <span class="job-title" id="job-title-${index}">${job.jobTitle}</span>
+                <span class="job-type" id="job-type-${index}">${job.jobType}</span>
+            </div>
+            <div class="job-meta">
+                <span class="job-company" id="job-company-${index}">${job.company}</span>
+                <span class="job-date" id="job-date-${index}">Posted on ${job.postedDate}</span>
+            </div>
+            <div class="job-salary-level">
+                <span class="job-salary" id="job-salary-${index}">${job.salary}</span>
+                <span class="job-level" id="job-level-${index}">${job.jobLevel}</span>
+            </div>
+            <div class="job-description" id="job-description-${index}">${job.jobDescription}</div>
+            <div class="job-tags" id="job-tags-${index}"></div>
+        `;
+
+        // Add tags dynamically
+        const tagsContainer = jobCard.querySelector(`#job-tags-${index}`);
+        job.tags.forEach(tag => {
+            const tagElement = document.createElement("span");
+            tagElement.className = "tag";
+            tagElement.textContent = tag;
+            tagsContainer.appendChild(tagElement);
+        });
+
+        // Insert the job card into the container
+        container.appendChild(jobCard);
+
+        // Always add "See more" functionality for every job
+        truncateDescription(index, 200);  // Truncate descriptions longer than 200 characters
+    });
+
+    function truncateDescription(id, maxLength) {
+        const description = document.getElementById(`job-description-${id}`);
+        const fullText = description.textContent.trim();
+
+        // Only truncate if text length exceeds maxLength
+        if (fullText.length > maxLength) {
             const truncatedText = fullText.substring(0, maxLength) + '...'; // Truncate with ellipsis
             description.textContent = truncatedText;  // Set the truncated text
-        
+
             // Add "See more" link
             const seeMore = document.createElement('span');
             seeMore.className = 'see-more';
             seeMore.textContent = ' See more';
             seeMore.onclick = function () {
-              toggleDescription(id);
+                showModal(id);
             };
             description.appendChild(seeMore);
             description.setAttribute('data-full-text', fullText);  // Store full text for later
-          }
-        }
-        
-        function toggleDescription(id) {
-          const description = document.getElementById(`job-description-${id}`);
-          const seeMore = description.querySelector('.see-more');
-        
-          // Toggle the full description when clicking "See more"
-          description.classList.toggle('expanded');
-        
-          if (description.classList.contains('expanded')) {
-            description.textContent = description.getAttribute('data-full-text');  // Show full description
-            const seeLess = document.createElement('span');
-            seeLess.className = 'see-more';
-            seeLess.textContent = ' See less';
-            seeLess.onclick = function () {
-              toggleDescription(id);
+        } else {
+            // If the text is short, always add a "See more" link
+            const seeMore = document.createElement('span');
+            seeMore.className = 'see-more';
+            seeMore.textContent = ' See more';
+            seeMore.onclick = function () {
+                showModal(id);
             };
-            description.appendChild(seeLess);
-          } else {
-            truncateDescription(id, 200);  // Revert back to truncated description
-          }
+            description.appendChild(seeMore);
         }
-        </script>
+    }
+
+    function showModal(id) {
+        const modal = document.getElementById('job-modal');
+        const job = jobsData[id];
+
+        // Populate the modal with job details
+        document.getElementById('modal-job-title').textContent = job.jobTitle;
+        document.getElementById('modal-company').textContent = `Company: ${job.company}`;
+        document.getElementById('modal-posted-date').textContent = `Posted Date: ${job.postedDate}`;
+        document.getElementById('modal-job-type').textContent = `Job Type: ${job.jobType}`;
+        document.getElementById('modal-job-description').textContent = job.jobDescription;
+        document.getElementById('modal-job-level').textContent = `Job Level: ${job.jobLevel}`;
+        document.getElementById('modal-salary').textContent = `Salary: ${job.salary}`;
+
+        // Populate tags
+        const modalTagsContainer = document.getElementById('modal-tags');
+        modalTagsContainer.innerHTML = '';
+        job.tags.forEach(tag => {
+            const tagElement = document.createElement('span');
+            tagElement.className = 'tag';
+            tagElement.textContent = tag;
+            modalTagsContainer.appendChild(tagElement);
+        });
+
+        // Display the modal
+        modal.style.display = 'block';
+    }
+
+    // Close modal when the close button is clicked
+    const closeModal = document.getElementsByClassName('close')[0];
+    closeModal.onclick = function() {
+        const modal = document.getElementById('job-modal');
+        modal.style.display = 'none';
+    };
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        const modal = document.getElementById('job-modal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+});
+
+    </script>
+    
 </body>
 </html>
