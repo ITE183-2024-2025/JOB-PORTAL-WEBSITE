@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Apply for Job - Upwork Style</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <style>
+        /* Reset and General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+    padding: 0 10px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    background-color: #0044cc;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+header h1 {
+    font-size: 2.5rem;
+}
+
+/* Job Details Section */
+.job-details {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.job-details .job-info h2 {
+    font-size: 1.8rem;
+    color: #0044cc;
+}
+
+.job-details .company-name {
+    font-size: 1.1rem;
+    color: #777;
+    margin: 10px 0;
+}
+
+.job-details .job-description {
+    font-size: 1.2rem;
+    color: #444;
+    margin-top: 15px;
+}
+
+/* Application Form */
+.application-form form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.application-form h3 {
+    font-size: 1.4rem;
+    color: #0044cc;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 1.1rem;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input, .input-group textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}
+
+.input-group textarea {
+    resize: vertical;
+}
+
+button {
+    background-color: #0044cc;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0033aa;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .job-details .job-info h2 {
+        font-size: 1.5rem;
+    }
+
+    .application-form form {
+        padding: 20px;
+    }
+
+    .input-group input, .input-group textarea {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
+
+    </style>
+    <div class="container">
+        
+
+        <!-- Job Description Section -->
+        <section class="job-details">
+            <div class="job-info">
+                <h2>Job Title: Web Developer</h2>
+                <p class="company-name">Company: XYZ Tech</p>
+                <p class="job-description">
+                    We're looking for a talented web developer to help us build scalable web applications. The ideal candidate
+                    should have experience with HTML, CSS, JavaScript, and React.
+                </p>
+            </div>
+        </section>
+
+        <!-- Application Form -->
+        <section class="application-form">
+            <form action="/submit-application" method="POST">
+                <h3>Your Details</h3>
+                <div class="input-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" name="full_name" placeholder="Enter your full name" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="example@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" required>
+                </div>
+                
+                <h3>Cover Letter</h3>
+                <div class="input-group">
+                    <label for="cover-letter">Write your cover letter</label>
+                    <textarea id="cover-letter" name="cover_letter" rows="6" placeholder="Tell us why you're the perfect fit for this job" required></textarea>
+                </div>
+
+                <h3>Upload Resume</h3>
+                <div class="input-group">
+                    <label for="resume">Attach your resume (PDF, DOC, DOCX)</label>
+                    <input type="file" id="resume" name="resume" accept=".pdf, .doc, .docx" required>
+                </div>
+
+                <button type="submit">Submit Application</button>
+            </form>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 XYZ Tech. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
