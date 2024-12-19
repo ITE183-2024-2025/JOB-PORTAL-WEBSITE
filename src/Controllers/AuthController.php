@@ -63,7 +63,7 @@ class AuthController extends BaseController
     public function logout()
     {
         Session::destroy();
-        $this->jsonResponse(['message' => 'You have successfully logged out', 'redirect' => '/login'], 'success', 200);
+        header('Location: /login');
     }
 
     /**
@@ -77,5 +77,25 @@ class AuthController extends BaseController
         }
 
         $this->render('dashboard.html', ['title' => 'Dashboard']);
+    }
+
+    public function showContact()
+    {
+        if (!Session::get('user_id')) {
+            $this->render('login.html', ['title' => 'Login', 'error' => 'You must be logged in to view this page']);
+            return;
+        }
+
+        $this->render('contact.html', ['title' => 'Contact']);
+    }
+
+    public function showAbout()
+    {
+        if (!Session::get('user_id')) {
+            $this->render('login.html', ['title' => 'Login', 'error' => 'You must be logged in to view this page']);
+            return;
+        }
+
+        $this->render('about.html', ['title' => 'About']);
     }
 }

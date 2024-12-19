@@ -21,6 +21,8 @@ function loadViewRoutes($router)
 
     $router->group($authMiddleware, function ($router) {
         $router->get('/dashboard', [AuthController::class, 'showDashboard']);
-        $router->get('/logout', [AuthController::class, 'logout']);
+        $router->post('/logout', [AuthController::class, 'logout']);
+        $router->get('/contact', [AuthController::class, 'showContact']);
+        $router->get('/about', [AuthController::class, 'showAbout']);
     });
 }

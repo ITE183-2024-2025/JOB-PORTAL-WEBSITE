@@ -12,12 +12,13 @@
         <ul class="nav__links" id="nav-links">
             <li><a href="#">Post a job</a></li>
             <li><a href="#">Find Work</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Contact</a></li>
         </ul>
         <div class="nav__btns">
-            <button class="btn sign__up">Sign Up</button>
-            <button class="btn sign__in">Sign In</button>
+            <form method="POST" action="/logout" id="logout-form">
+                <button type="submit" class="btn sign__in">Log out</button>
+            </form>
         </div>
     </nav>
 </div>
